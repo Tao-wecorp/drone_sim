@@ -7,6 +7,7 @@
 
 ## Env
 1. ./env.sh
+2. rosrun pysdf sdf2urdf.py sjtu_drone.sdf sjtu_drone.urdf
 
 ## Run
 1. ./run_gazebo.sh
