@@ -1,0 +1,3 @@
+[submodule "src/sjtu-drone"]
+	path = src/sjtu-drone
+	url = https://github.com/tahsinkose/sjtu-drone
