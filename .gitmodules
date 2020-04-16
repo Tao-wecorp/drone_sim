@@ -2,3 +2,6 @@
 [submodule "src/sjtu-drone"]
 	path = src/sjtu-drone
 	url = https://github.com/Tao-wecorp/sjtu-drone
+[submodule "src/teleop_twist_keyboard"]
+	path = src/teleop_twist_keyboard
+	url = https://github.com/Tao-wecorp/teleop_twist_keyboard
