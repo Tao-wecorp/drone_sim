@@ -1,0 +1,23 @@
+# Algortihm Parameters
+alpha: 0.5
+gamma: 1.0
+epsilon: 0.1
+epsilon_discount: 0.95
+nepisodes: 2000
+
+# Environment Parameters
+limits: # in meters
+    min_x: -5.0
+    max_x: 5.0
+    min_y: -5.0
+    max_y: 5.0
+    max_altitude: 3.0   
+    min_altitude: 0.4
+desired_pose:
+    x: 3.0
+    y: 2.0
+    z: 2.0
+
+max_incl: 0.3       # in rads
+running_step: 2.5  # in seconds
+experiment: 8
