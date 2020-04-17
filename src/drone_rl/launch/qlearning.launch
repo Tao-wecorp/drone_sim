@@ -3,6 +3,6 @@
     <include file="$(find drone_rl)/launch/drone.launch"/>
     <rosparam command="load" file="$(find drone_rl)/config/qlearning_params.yaml" />
     <!-- Launch the training system -->
-    <!-- <node pkg="cartpole_tests" name="cartpole3D_n1try" type="cartpole3D_n1try.py" output="screen"/>
-    <node pkg="cartpole_tests" name="reward_chart" type="reward_chart.py" output="screen"/> -->
+    <!-- <node pkg="drone_rl" name="qlearning" type="qlearning.py" output="screen"/>
+    <node pkg="drone_rl" name="reward_chart" type="reward_chart.py" output="screen"/> -->
 </launch>

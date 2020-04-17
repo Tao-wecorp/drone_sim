@@ -21,9 +21,12 @@ import time
 
 from helpers.openpose import OpenPose
 openpose = OpenPose()
+pose = Pose()
 x_fpv, y_fpv = [320, 480]
 
-pose = Pose()
+from helpers.control import Control
+control = Control()
+
 
 class Yaw(object):
     def __init__(self):
