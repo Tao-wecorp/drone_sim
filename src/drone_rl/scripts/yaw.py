@@ -25,47 +25,43 @@ openpose = OpenPose()
 pose = Pose()
 x_fpv, y_fpv = [320, 480]
 
-# from helpers.control import Control
-# control = Control()
+from helpers.control import Control
+control = Control()
 
 
 class Yaw(object):
     def __init__(self):
-        
         rospy.init_node('yaw_node', anonymous=True)
-        self.ctrl_c = False
         self.rate = rospy.Rate(30)
 
         self.img_sub = rospy.Subscriber("/drone/front_camera/image_raw",Image,self.camera_callback)
         self.bridge_object = CvBridge()
         self.frame = None
         self.robot_position = None
-    
-        # self.reset_simulation = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
-        # self.reset_simulation()
+
+        self.reset_simulation = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
+        self.reset_simulation()
+        self.states_sub = rospy.Subscriber("/gazebo/model_states",ModelStates,self.states_callback)
 
         self._pub_cmd_vel = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
         self._move_msg = Twist()
 
-        state_robot_msg = ModelState()
-        state_robot_msg.model_name = 'robot'
         while not rospy.is_shutdown():
             if self.frame is not None:
                 start_time = time.time()
                 frame = deepcopy(self.frame)
                 
-                points = openpose.detect(frame)
-                if points[11] is None:
-                    continue
-                else:
-                    x_hip, y_hip = points[11]
-                    yaw_angle = openpose.yaw([x_hip, y_hip])
-                    # print yaw_angle
+                # points = openpose.detect(frame)
+                # x_hip, y_hip = points[11]
+                # yaw_angle = openpose.yaw([x_hip, y_hip])
+                # # print yaw_angle
 
-                    # for i in range(len(points)):
-                    #     if points[i] is not None:
-                    #         frame = cv2.circle(frame, (int(points[i][0]), int(points[i][1])), 3, (0, 255, 255), thickness=-1, lineType=cv2.FILLED)
-                    frame = cv2.circle(frame, (int(x_hip), int(y_hip)), 3, (0, 255, 255), thickness=-1, lineType=cv2.FILLED)
+                # yaw_angle = 60
+
+                # for i in range(len(points)):
+                #     if points[i] is not None:
+                #         frame = cv2.circle(frame, (int(points[i][0]), int(points[i][1])), 3, (0, 255, 255), thickness=-1, lineType=cv2.FILLED)
+                # frame = cv2.circle(frame, (int(x_hip), int(y_hip)), 3, (0, 255, 255), thickness=-1, lineType=cv2.FILLED)
                 frame = cv2.circle(frame, (int(x_fpv), int(y_fpv)), 10, (255, 0, 255), thickness=-1, lineType=cv2.FILLED)
                 cv2.imshow("", frame)
                 cv2.waitKey(1)
@@ -82,8 +78,8 @@ class Yaw(object):
         self.frame = cv_img
 
     def states_callback(self,data):
-        self.robot_position = data.pose[2].position
-
+        self.robot_position = data.twist[2]
+        # print self.robot_position
 
 def main():
     try:
@@ -91,6 +87,7 @@ def main():
     except KeyboardInterrupt:
         pass
     cv2.destroyAllWindows()
+    control.land()
 
 if __name__ == '__main__':
     main()
