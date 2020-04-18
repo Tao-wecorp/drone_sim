@@ -79,7 +79,7 @@ class Yaw(object):
 
     def states_callback(self,data):
         self.robot_position = data.twist[2]
-        # print self.robot_position
+        print self.robot_position
 
 def main():
     try:

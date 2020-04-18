@@ -8,5 +8,4 @@
 
     <param name="robot_description" textfile="$(find sjtu_drone)/models/sjtu_drone/sjtu_drone.urdf" />
     <node name="spawn_model" pkg="sjtu_drone" type="spawn_model" respawn="false" />
-    <!-- <node name="takeoff" pkg="drone_rl" type="takeoff.py" output="screen"/> -->
 </launch>
