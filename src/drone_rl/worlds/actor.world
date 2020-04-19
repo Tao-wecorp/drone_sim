@@ -28,19 +28,19 @@
             <pose>5 2 0 0 0 -1.57</pose>
           </waypoint>
           <waypoint>
-            <time>2</time>
+            <time>5</time>
             <pose>5 -2 0 0 0 -1.57</pose>
           </waypoint>
           <waypoint>
-            <time>2.5</time>
+            <time>6</time>
             <pose>5 -2 0 0 0 1.57</pose>
           </waypoint>
           <waypoint>
-            <time>5</time>
+            <time>11</time>
             <pose>5 2 0 0 0 1.57</pose>
           </waypoint>
           <waypoint>
-            <time>5.5</time>
+            <time>12</time>
             <pose>5 2 0 0 0 -1.57</pose>
           </waypoint>
         </trajectory>
