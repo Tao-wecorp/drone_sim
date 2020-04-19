@@ -12,6 +12,7 @@ class Rotate(object):
     def __init__(self):
         rospy.init_node('rotate_node')
         self.rate = rospy.Rate(30)
+        self.kp = 0.5
         self.yaw = 0.0
 
         rospy.Subscriber ('/drone/gt_pose', Pose, self.pose_callback)
@@ -26,8 +27,8 @@ class Rotate(object):
         rospy.on_shutdown(self.land)
 
         while not rospy.is_shutdown():
-            yaw = 90*pi/180
-            self._move_msg.angular.z = 0.5 * (yaw - self.yaw)
+            yaw = 30*pi/180
+            self._move_msg.angular.z = self.kp * (yaw - self.yaw)
             self._pub_cmd_vel.publish(self._move_msg)
             self.rate.sleep()
 
