@@ -2,8 +2,6 @@
 
 import rospy
 from gazebo_msgs.msg import ModelState, ModelStates
-from gazebo_msgs.srv import SetModelState
-from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Image
 from std_msgs.msg import Float64
 from std_srvs.srv import Empty
@@ -32,7 +30,6 @@ class Yaw(object):
     def __init__(self):
         rospy.init_node('yaw_node', anonymous=True)
         self.rate = rospy.Rate(10)
-        self.yaw_angle = 0
         self.yaw = 0.0
 
         # self.reset_simulation = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
@@ -55,14 +52,14 @@ class Yaw(object):
                 frame = deepcopy(self.frame)
                 
                 points = openpose.detect(frame)
-                if points[11] is None:
+                # print("%s seconds" % (time.time() - start_time))
+                time.sleep(round((time.time() - start_time), 1))
+
+                if points[11] is None: # hip point
                     continue
                 else:
                     x_hip, y_hip = points[11]
                     yaw_angle = openpose.yaw([x_hip, y_hip])
-                    print("%s seconds" % (time.time() - start_time))
-                    time.sleep(round((time.time() - start_time), 1)) 
-
                     self._move_msg.angular.z = kp * (yaw_angle*pi/180 - self.yaw)
                     self._pub_cmd_vel.publish(self._move_msg)
 
@@ -84,13 +81,11 @@ class Yaw(object):
 
     def pose_callback(self, data):
         orientation = data.orientation
-        roll, pitch, yaw = euler_from_quaternion([orientation.x, orientation.y, orientation.z, orientation.w])
-        self.yaw = yaw
+        self.yaw = euler_from_quaternion([orientation.x, orientation.y, orientation.z, orientation.w])[2]
 
     def shutdown(self):
         cv2.destroyAllWindows()
         control.land()
-        time.sleep(1)
 
 def main():
     try:
