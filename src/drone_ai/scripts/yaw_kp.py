@@ -64,6 +64,7 @@ class Yaw(object):
                     x_hip, y_hip = points[11]
                     yaw_angle = openpose.yaw([x_hip, y_hip])
                     # To-do: Investigation on proportional controller
+                    # https://www.theconstructsim.com/ros-qa-135-how-to-rotate-a-robot-to-a-desired-heading-using-feedback-from-odometry/
                     self._move_msg.angular.z = kp * (yaw_angle*pi/180 - yaw)
                     self._pub_cmd_vel.publish(self._move_msg)
 
