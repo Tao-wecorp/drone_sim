@@ -50,18 +50,19 @@ class Yaw(object):
             if self.frame is not None:
                 frame = deepcopy(self.frame)
                 
-                # To-do: service
+                # To-do: openpose service
                 start_time = time.time()
                 points = openpose.detect(frame)
                 # print("%s seconds" % (time.time() - start_time))
                 time.sleep(round((time.time() - start_time), 1))
 
-                # To-do: action
+                # To-do: yaw action
                 if points[11] is None: # hip point
                     continue
                 else:
                     x_hip, y_hip = points[11]
                     yaw_angle = openpose.yaw([x_hip, y_hip])
+                    # To-do: Investigation on proportional controller
                     self._move_msg.angular.z = kp * (yaw_angle*pi/180 - self.yaw)
                     self._pub_cmd_vel.publish(self._move_msg)
 
