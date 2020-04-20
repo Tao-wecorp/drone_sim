@@ -48,13 +48,15 @@ class Yaw(object):
 
         while not rospy.is_shutdown():
             if self.frame is not None:
-                start_time = time.time()
                 frame = deepcopy(self.frame)
                 
+                # To-do: service
+                start_time = time.time()
                 points = openpose.detect(frame)
                 # print("%s seconds" % (time.time() - start_time))
                 time.sleep(round((time.time() - start_time), 1))
 
+                # To-do: action
                 if points[11] is None: # hip point
                     continue
                 else:
