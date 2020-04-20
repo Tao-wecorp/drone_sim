@@ -51,12 +51,13 @@ class Yaw(object):
                 frame = deepcopy(self.frame)
                 yaw = deepcopy(self.yaw)
                 
-                # To-do: openpose service
+                # To-do: multithread or service node
+                # https://answers.ros.org/question/287178/multithreading-vs-ros-nodes/
                 start_time = time.time()
                 points = openpose.detect(frame)
                 # print("%s seconds" % (time.time() - start_time))
 
-                # To-do: yaw action
+                # To-do: multithread or action node
                 if points[11] is None: # hip point
                     continue
                 else:
