@@ -55,7 +55,6 @@ class Yaw(object):
                 start_time = time.time()
                 points = openpose.detect(frame)
                 # print("%s seconds" % (time.time() - start_time))
-                # time.sleep(round((time.time() - start_time), 1))
 
                 # To-do: yaw action
                 if points[11] is None: # hip point
