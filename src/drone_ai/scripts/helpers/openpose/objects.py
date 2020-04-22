@@ -44,9 +44,9 @@ class OpenPose():
                 points.append(None)
         return points
 
-    def yaw(self, position):
+    def calcYawAngle(self, position):
         new_goal = degrees(atan(float(320-position[0])/(480-position[1])))
         # yaw = new_goal + self.goal
-        yaw = new_goal
-        self.goal = yaw
-        return yaw
+        yaw_angle = new_goal
+        self.goal = yaw_angle
+        return yaw_angle

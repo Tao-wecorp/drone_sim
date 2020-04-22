@@ -35,38 +35,37 @@ class Yaw(object):
         # self.reset_simulation = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
         # self.reset_simulation()
 
-        self.img_sub = rospy.Subscriber("/drone/front_camera/image_raw",Image,self.camera_callback)
+        rospy.Subscriber("/drone/front_camera/image_raw",Image,self.camera_callback)
         self.bridge_object = CvBridge()
         self.frame = None
 
         rospy.Subscriber ('/drone/gt_pose', Pose, self.pose_callback)
-        self._pub_cmd_vel = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
-        self._move_msg = Twist()
+        self.pub_cmd_vel = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
+        self.move_msg = Twist()
 
         control.takeoff()
         rospy.on_shutdown(self.shutdown)
 
         while not rospy.is_shutdown():
             if self.frame is not None:
+                start_time = time.time()
                 frame = deepcopy(self.frame)
                 yaw = deepcopy(self.yaw)
                 
                 # To-do: multithread or service node
                 # https://answers.ros.org/question/287178/multithreading-vs-ros-nodes/
-                start_time = time.time()
                 points = openpose.detect(frame)
-                # print("%s seconds" % (time.time() - start_time))
 
                 # To-do: multithread or action node
                 if points[11] is None: # hip point
                     continue
                 else:
                     x_hip, y_hip = points[11]
-                    yaw_angle = openpose.yaw([x_hip, y_hip])
+                    yaw_angle = openpose.calcYawAngle([x_hip, y_hip])
                     # To-do: Investigation on proportional controller
                     # https://www.theconstructsim.com/ros-qa-135-how-to-rotate-a-robot-to-a-desired-heading-using-feedback-from-odometry/
-                    self._move_msg.angular.z = kp * (yaw_angle*pi/180 - yaw)
-                    self._pub_cmd_vel.publish(self._move_msg)
+                    self.move_msg.angular.z = kp * (yaw_angle*pi/180 - yaw)
+                    self.pub_cmd_vel.publish(self.move_msg)
 
                 for i in range(len(points)):
                     if points[i] is not None:
@@ -74,6 +73,9 @@ class Yaw(object):
                 frame = cv2.circle(frame, (int(x_fpv), int(y_fpv)), 10, (255, 0, 255), thickness=-1, lineType=cv2.FILLED)
                 cv2.imshow("", frame)
                 cv2.waitKey(1)
+                
+                # print("%s seconds" % (time.time() - start_time))
+                # time.sleep(round((time.time() - start_time), 1))
 
             self.rate.sleep()
     
