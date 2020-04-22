@@ -30,7 +30,7 @@ class Yaw(object):
     def __init__(self):
         rospy.init_node('yaw_node', anonymous=True)
         self.rate = rospy.Rate(10)
-        self.yaw = 0.0
+        self.current_yaw = 0.0
 
         # self.reset_simulation = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
         # self.reset_simulation()
@@ -50,7 +50,7 @@ class Yaw(object):
             if self.frame is not None:
                 start_time = time.time()
                 frame = deepcopy(self.frame)
-                yaw = deepcopy(self.yaw)
+                current_yaw = deepcopy(self.current_yaw)
                 
                 # To-do: multithread or service node
                 # https://answers.ros.org/question/287178/multithreading-vs-ros-nodes/
@@ -64,7 +64,7 @@ class Yaw(object):
                     yaw_angle = openpose.calcYawAngle([x_hip, y_hip])
                     # To-do: Investigation on proportional controller
                     # https://www.theconstructsim.com/ros-qa-135-how-to-rotate-a-robot-to-a-desired-heading-using-feedback-from-odometry/
-                    self.move_msg.angular.z = kp * (yaw_angle*pi/180 - yaw)
+                    self.move_msg.angular.z = kp * (yaw_angle*pi/180 - current_yaw)
                     self.pub_cmd_vel.publish(self.move_msg)
 
                 for i in range(len(points)):
@@ -75,7 +75,6 @@ class Yaw(object):
                 cv2.waitKey(1)
                 
                 # print("%s seconds" % (time.time() - start_time))
-                # time.sleep(round((time.time() - start_time), 1))
 
             self.rate.sleep()
     
@@ -88,7 +87,7 @@ class Yaw(object):
 
     def pose_callback(self, data):
         orientation = data.orientation
-        self.yaw = euler_from_quaternion([orientation.x, orientation.y, orientation.z, orientation.w])[2]
+        self.current_yaw = euler_from_quaternion([orientation.x, orientation.y, orientation.z, orientation.w])[2]
 
     def shutdown(self):
         cv2.destroyAllWindows()
