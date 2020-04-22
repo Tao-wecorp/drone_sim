@@ -12,7 +12,7 @@
         <filename>moonwalk.dae</filename>
         <scale>1.0</scale>
       </skin>
-      <pose>2 0 0 0 0</pose>
+      <pose>5 0 0 0 0</pose>
       <animation name="walking">
         <filename>walk.dae</filename>
         <scale>1.0</scale>
@@ -25,23 +25,23 @@
         <trajectory id="0" type="walking">
           <waypoint>
             <time>0</time>
-            <pose>2 2 0 0 0 -1.57</pose>
+            <pose>5 3 0 0 0 -1.57</pose>
           </waypoint>
           <waypoint>
-            <time>2</time>
-            <pose>2 -2 0 0 0 -1.57</pose>
+            <time>6</time>
+            <pose>5 -3 0 0 0 -1.57</pose>
           </waypoint>
           <waypoint>
-            <time>2.5</time>
-            <pose>2 -2 0 0 0 1.57</pose>
+            <time>8</time>
+            <pose>5 -3 0 0 0 1.57</pose>
           </waypoint>
           <waypoint>
-            <time>5</time>
-            <pose>2 2 0 0 0 1.57</pose>
+            <time>14</time>
+            <pose>5 3 0 0 0 1.57</pose>
           </waypoint>
           <waypoint>
-            <time>5.5</time>
-            <pose>2 2 0 0 0 -1.57</pose>
+            <time>16</time>
+            <pose>5 3 0 0 0 -1.57</pose>
           </waypoint>
         </trajectory>
       </script>
@@ -51,7 +51,7 @@
         <filename>run.dae</filename>
         <scale>1.0</scale>
       </skin>
-      <pose>3 0 0 0 0</pose>
+      <pose>4 0 0 0 0</pose>
       <animation name="running">
         <filename>run.dae</filename>
         <scale>1.0</scale>
@@ -64,23 +64,23 @@
         <trajectory id="0" type="running">
           <waypoint>
             <time>0</time>
-            <pose>3 -2 0 0 0 1.57</pose>
+            <pose>4 -2 0 0 0 1.57</pose>
           </waypoint>
           <waypoint>
             <time>2</time>
-            <pose>3 2 0 0 0 1.57</pose>
+            <pose>4 2 0 0 0 1.57</pose>
           </waypoint>
           <waypoint>
             <time>2.5</time>
-            <pose>3 2 0 0 0 -1.57</pose>
+            <pose>4 2 0 0 0 -1.57</pose>
           </waypoint>
           <waypoint>
             <time>5</time>
-            <pose>3 -2 0 0 0 -1.57</pose>
+            <pose>4 -2 0 0 0 -1.57</pose>
           </waypoint>
           <waypoint>
             <time>5.5</time>
-            <pose>3 -2 0 0 0 1.57</pose>
+            <pose>4 -2 0 0 0 1.57</pose>
           </waypoint>
         </trajectory>
       </script>
