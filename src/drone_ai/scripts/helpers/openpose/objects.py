@@ -38,10 +38,7 @@ class OpenPose():
             x = (frameWidth * point[0]) / W
             y = (frameHeight * point[1]) / H
 
-            if (prob > threshold):
-                points.append((int(x), int(y)))
-            else :
-                points.append(None)
+            points.append((int(x), int(y)) if prob > threshold else None)
         return points
 
     def calcYawAngle(self, position):
