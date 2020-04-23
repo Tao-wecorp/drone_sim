@@ -18,6 +18,13 @@ openpose = OpenPoseVGG()
 from helpers.control import Control
 control = Control()
 
+POSE_PAIRS = [[1,2], [1,5], [2,3], [3,4], [5,6], [6,7],
+              [1,8], [8,9], [9,10], [1,11], [11,12], [12,13],
+              [1,0], [0,14], [14,16], [0,15], [15,17],
+              [2,17], [5,16] ]
+colors = [ [0,100,255], [0,100,255], [0,255,255], [0,100,255], [0,255,255], [0,100,255],
+         [0,255,0], [255,200,100], [255,0,255], [0,255,0], [255,200,100], [255,0,255],
+         [0,0,255], [255,0,0], [200,200,0], [255,0,0], [200,200,0], [0,0,0]]
 
 class Tracking(object):
     def __init__(self):
@@ -36,16 +43,18 @@ class Tracking(object):
                 start_time = time.time()
                 frame = deepcopy(self.frame)
                 
-                points = openpose.detect(frame)
-
-                for i in range(len(points)):
-                    if points[i] is not None:
-                        frame = cv2.circle(frame, (int(points[i][0]), int(points[i][1])), 3, (0, 255, 255), thickness=-1, lineType=cv2.FILLED)
+                personwiseKeypoints,  keypoints_list= openpose.detect(frame)
+                for i in range(17):
+                    for n in range(len(personwiseKeypoints)):
+                        index = personwiseKeypoints[n][np.array(POSE_PAIRS[i])]
+                        if -1 in index:
+                            continue
+                        B = np.int32(keypoints_list[index.astype(int), 0])
+                        A = np.int32(keypoints_list[index.astype(int), 1])
+                        cv2.line(frame, (B[0], A[0]), (B[1], A[1]), colors[i], 3, cv2.LINE_AA)
                 cv2.imshow("", frame)
                 cv2.waitKey(1)
-                
-                print("%s seconds" % (time.time() - start_time))
-
+                # print("%s seconds" % (time.time() - start_time))
             self.rate.sleep()
     
     def camera_callback(self,data):
