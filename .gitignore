@@ -132,3 +132,7 @@ dmypy.json
 # ROS
 .idea/
 .catkin_workspace
+
+# models
+*.prototxt
+*.caffemodel

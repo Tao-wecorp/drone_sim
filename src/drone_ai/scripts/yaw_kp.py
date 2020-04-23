@@ -17,8 +17,8 @@ from math import *
 import numpy as np
 import time
 
-from helpers.openpose import OpenPose
-openpose = OpenPose()
+from helpers.openpose import OpenPoseMobileNet
+openpose = OpenPoseMobileNet()
 pose = Pose()
 x_fpv, y_fpv = [320, 480]
 

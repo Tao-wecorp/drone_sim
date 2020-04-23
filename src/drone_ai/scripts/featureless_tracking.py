@@ -3,19 +3,17 @@
 import rospy
 from sensor_msgs.msg import Image
 from std_msgs.msg import Float64
-from std_srvs.srv import Empty
 
 from copy import deepcopy
 from cv_bridge import CvBridge, CvBridgeError
 import cv2
 
-import keras
 from math import *
 import numpy as np
 import time
 
-from helpers.openpose import OpenPose
-openpose = OpenPose()
+from helpers.openpose import OpenPoseVGG
+openpose = OpenPoseVGG()
 
 from helpers.control import Control
 control = Control()
@@ -23,11 +21,8 @@ control = Control()
 
 class Tracking(object):
     def __init__(self):
-        rospy.init_node('yaw_node', anonymous=True)
+        rospy.init_node('tracking_node', anonymous=True)
         self.rate = rospy.Rate(10)
-
-        self.reset_simulation = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
-        self.reset_simulation()
 
         rospy.Subscriber("/drone/front_camera/image_raw",Image,self.camera_callback)
         self.bridge_object = CvBridge()
@@ -49,7 +44,7 @@ class Tracking(object):
                 cv2.imshow("", frame)
                 cv2.waitKey(1)
                 
-                # print("%s seconds" % (time.time() - start_time))
+                print("%s seconds" % (time.time() - start_time))
 
             self.rate.sleep()
     

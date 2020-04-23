@@ -16,7 +16,7 @@ nPoints = 18
 threshold = 0.1
 inputSize = 300
 
-class OpenPose():
+class OpenPoseMobileNet():
     def __init__(self):
         self.goal = 0.0  # [angle]
 
@@ -39,6 +39,7 @@ class OpenPose():
             y = (frameHeight * point[1]) / H
 
             points.append((int(x), int(y)) if prob > threshold else None)
+
         return points
 
     def calcYawAngle(self, position):
