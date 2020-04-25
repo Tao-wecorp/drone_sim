@@ -39,7 +39,7 @@ colors = [ [0,100,255], [0,100,255], [0,255,255], [0,100,255], [0,255,255], [0,1
 
 
 
-class OpenPoseVGG():
+class OpenPoseVGG:
     def __init__(self):
         self.goal = 0.0  # [angle]
         self.detected_keypoints = []

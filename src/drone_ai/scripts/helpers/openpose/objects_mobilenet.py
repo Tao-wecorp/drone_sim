@@ -16,7 +16,7 @@ nPoints = 18
 threshold = 0.1
 inputSize = 300
 
-class OpenPoseMobileNet():
+class OpenPoseMobileNet:
     def __init__(self):
         self.goal = 0.0  # [angle]
 

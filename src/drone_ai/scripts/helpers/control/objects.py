@@ -5,7 +5,7 @@ import time
 from std_msgs.msg import Empty
 from geometry_msgs.msg import Twist
 
-class Control():
+class Control:
     def __init__(self):
         self.ctrl_c = False
         self._pub_cmd_vel = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
