@@ -44,6 +44,7 @@ class Tracking(object):
                 frame = deepcopy(self.frame)
                 
                 personwiseKeypoints,  keypoints_list= openpose.detect(frame)
+                # print(personwiseKeypoints,  keypoints_list)
                 for i in range(17):
                     for n in range(len(personwiseKeypoints)):
                         index = personwiseKeypoints[n][np.array(POSE_PAIRS[i])]
@@ -51,7 +52,7 @@ class Tracking(object):
                             continue
                         B = np.int32(keypoints_list[index.astype(int), 0])
                         A = np.int32(keypoints_list[index.astype(int), 1])
-                        cv2.line(frame, (B[0], A[0]), (B[1], A[1]), colors[i], 3, cv2.LINE_AA)
+                        cv2.line(frame, (B[0], A[0]), (B[1], A[1]), colors[n], 3, cv2.LINE_AA)
                 cv2.imshow("", frame)
                 cv2.waitKey(1)
                 # print("%s seconds" % (time.time() - start_time))
