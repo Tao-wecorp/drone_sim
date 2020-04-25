@@ -70,7 +70,6 @@ class OpenPoseVGG:
 
             
             self.detected_keypoints.append(keypoints_with_id)
-            print(self.detected_keypoints)
         
         valid_pairs, invalid_pairs = self._getValidPairs(output)
         personwiseKeypoints = self._getPersonwiseKeypoints(valid_pairs, invalid_pairs)

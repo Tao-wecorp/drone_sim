@@ -1,1 +1,1 @@
-from .objects import DaSiamRPN
+from .objects import PostKNN
