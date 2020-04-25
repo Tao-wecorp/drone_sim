@@ -62,8 +62,15 @@ class OpenPoseVGG():
             probMap = output[0,part,:,:]
             probMap = cv2.resize(probMap, (self.frameWidth, self.frameHeight))
             keypoints = self._getKeypoints(probMap, threshold)
+            keypoints_with_id = []
             for i in range(len(keypoints)):
+                keypoints_with_id.append(keypoints[i] + (keypoint_id,))
                 self.keypoints_list = np.vstack([self.keypoints_list, keypoints[i]])
+                keypoint_id += 1
+
+            
+            self.detected_keypoints.append(keypoints_with_id)
+            print(self.detected_keypoints)
         
         valid_pairs, invalid_pairs = self._getValidPairs(output)
         personwiseKeypoints = self._getPersonwiseKeypoints(valid_pairs, invalid_pairs)
