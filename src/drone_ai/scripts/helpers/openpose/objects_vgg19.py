@@ -41,7 +41,7 @@ colors = [ [0,100,255], [0,100,255], [0,255,255], [0,100,255], [0,255,255], [0,1
 
 class OpenPoseVGG():
     def __init__(self):
-        self.goal = 0.0  # [angle]
+        self.threshold = 0.1
 
     def detect(self, cv_image):
         self.frameWidth = cv_image.shape[1]
@@ -52,17 +52,16 @@ class OpenPoseVGG():
 
         net.setInput(cv2.dnn.blobFromImage(cv_image, 1.0/255, (inWidth, inHeight), (0, 0, 0), swapRB=False, crop=False))
         output = net.forward()
-        # output = output[:, :nPoints, :, :]
         
         self.detected_keypoints = []
         self.keypoints_list = np.zeros((0,3))
         keypoint_id = 0
-        threshold = 0.1
+        
 
-        for part in range(nPoints):
+        for part in range(18):
             probMap = output[0,part,:,:]
             probMap = cv2.resize(probMap, (cv_image.shape[1], cv_image.shape[0]))
-            keypoints = self._getKeypoints(probMap, threshold)
+            keypoints = self._getKeypoints(probMap, self.threshold)
             keypoints_with_id = []
             for i in range(len(keypoints)):
                 keypoints_with_id.append(keypoints[i] + (keypoint_id,))
@@ -74,13 +73,10 @@ class OpenPoseVGG():
         valid_pairs, invalid_pairs = self._getValidPairs(output)
         personwiseKeypoints = self._getPersonwiseKeypoints(valid_pairs, invalid_pairs)
 
-        return  self.detected_keypoints
+        return self.detected_keypoints
    
     def calcYawAngle(self, position):
-        new_goal = degrees(atan(float(320-position[0])/(480-position[1])))
-        # yaw = new_goal + self.goal
-        yaw_angle = new_goal
-        self.goal = yaw_angle
+        yaw_goal = degrees(atan(float(320-position[0])/(480-position[1])))
         return yaw_angle
 
 

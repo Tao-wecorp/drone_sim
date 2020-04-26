@@ -55,7 +55,7 @@ class Tracking(object):
                 
                 detected_keypoints = openpose.detect(frame)
                 
-                for i in range(17):
+                for i in range(18):
                     for j in range(len(detected_keypoints[i])):
                         cv2.circle(frame, detected_keypoints[i][j][0:2], 3, [0,0,255], -1, cv2.LINE_AA)
 
