@@ -43,21 +43,23 @@ class Tracking(object):
                 start_time = time.time()
                 frame = deepcopy(self.frame)
                 
-                # personwiseKeypoints,  keypoints_list= openpose.detect(frame)
-                # for i in range(17):
-                #     for n in range(len(personwiseKeypoints)):
-                #         index = personwiseKeypoints[n][np.array(POSE_PAIRS[i])]
-                #         if -1 in index:
-                #             continue
-                #         B = np.int32(keypoints_list[index.astype(int), 0])
-                #         A = np.int32(keypoints_list[index.astype(int), 1])
-                #         cv2.line(frame, (B[0], A[0]), (B[1], A[1]), colors[i], 3, cv2.LINE_AA)
+                personwiseKeypoints,  keypoints_list= openpose.detectPersonwiseKeypoints(frame)
+                for i in range(17):
+                    for n in range(len(personwiseKeypoints)):
+                        index = personwiseKeypoints[n][np.array(POSE_PAIRS[i])]
+                        if -1 in index:
+                            continue
+                        B = np.int32(keypoints_list[index.astype(int), 0])
+                        A = np.int32(keypoints_list[index.astype(int), 1])
+                        if i==0:
+                            cv2.putText(frame, str(n), (B[0], A[0]-50), cv2.FONT_HERSHEY_PLAIN, 1.0, colors[n], 2)
+                        cv2.line(frame, (B[0], A[0]), (B[1], A[1]), colors[n], 3, cv2.LINE_AA)
                 
-                detected_keypoints = openpose.detect(frame)
+                # detected_keypoints = openpose.detectKeypoints(frame)
                 
-                for i in range(18):
-                    for j in range(len(detected_keypoints[i])):
-                        cv2.circle(frame, detected_keypoints[i][j][0:2], 3, [0,0,255], -1, cv2.LINE_AA)
+                # for i in range(18):
+                #     for j in range(len(detected_keypoints[i])):
+                #         cv2.circle(frame, detected_keypoints[i][j][0:2], 3, [0,0,255], -1, cv2.LINE_AA)
 
                 cv2.imshow("", frame)
                 cv2.waitKey(1)

@@ -43,7 +43,7 @@ class OpenPoseVGG():
     def __init__(self):
         self.threshold = 0.1
 
-    def detect(self, cv_image):
+    def detectPersonwiseKeypoints(self, cv_image):
         self.frameWidth = cv_image.shape[1]
         self.frameHeight = cv_image.shape[0]
 
@@ -72,13 +72,43 @@ class OpenPoseVGG():
         
         valid_pairs, invalid_pairs = self._getValidPairs(output)
         personwiseKeypoints = self._getPersonwiseKeypoints(valid_pairs, invalid_pairs)
+        personwiseKeypoints = [person for person in personwiseKeypoints if person[18] >= 10]
+        
+        print(len(personwiseKeypoints))
+
+        return personwiseKeypoints, self.keypoints_list
+
+    def detectKeypoints(self, cv_image):
+        self.frameWidth = cv_image.shape[1]
+        self.frameHeight = cv_image.shape[0]
+
+        inHeight = 300
+        inWidth = int((inHeight/self.frameHeight)*self.frameWidth)
+
+        net.setInput(cv2.dnn.blobFromImage(cv_image, 1.0/255, (inWidth, inHeight), (0, 0, 0), swapRB=False, crop=False))
+        output = net.forward()
+        
+        self.detected_keypoints = []
+        self.keypoints_list = np.zeros((0,3))
+        keypoint_id = 0
+
+        for part in range(18):
+            probMap = output[0,part,:,:]
+            probMap = cv2.resize(probMap, (cv_image.shape[1], cv_image.shape[0]))
+            keypoints = self._getKeypoints(probMap, self.threshold)
+            keypoints_with_id = []
+            for i in range(len(keypoints)):
+                keypoints_with_id.append(keypoints[i] + (keypoint_id,))
+                self.keypoints_list = np.vstack([self.keypoints_list, keypoints[i]])
+                keypoint_id += 1
+
+            self.detected_keypoints.append(keypoints_with_id)
 
         return self.detected_keypoints
    
     def calcYawAngle(self, position):
         yaw_goal = degrees(atan(float(320-position[0])/(480-position[1])))
         return yaw_angle
-
 
     def _getKeypoints(self, probMap, threshold=0.1):
         mapSmooth = cv2.GaussianBlur(probMap,(3,3),0,0)
