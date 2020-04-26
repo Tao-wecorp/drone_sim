@@ -54,11 +54,10 @@ class Tracking(object):
                 #         cv2.line(frame, (B[0], A[0]), (B[1], A[1]), colors[i], 3, cv2.LINE_AA)
                 
                 detected_keypoints = openpose.detect(frame)
-                print(detected_keypoints)
+                
                 for i in range(17):
                     for j in range(len(detected_keypoints[i])):
                         cv2.circle(frame, detected_keypoints[i][j][0:2], 3, [0,0,255], -1, cv2.LINE_AA)
-                
 
                 cv2.imshow("", frame)
                 cv2.waitKey(1)
@@ -73,14 +72,15 @@ class Tracking(object):
         self.frame = cv_img
 
     def shutdown(self):
-        cv2.destroyAllWindows()
         control.land()
+
 
 def main():
     try:
         Tracking()
     except KeyboardInterrupt:
         pass
+    cv2.destroyAllWindows()
     
 
 if __name__ == '__main__':
