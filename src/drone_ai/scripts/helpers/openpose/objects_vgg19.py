@@ -74,7 +74,15 @@ class OpenPoseVGG():
         personwiseKeypoints = self._getPersonwiseKeypoints(valid_pairs, invalid_pairs)
         personwiseKeypoints = [person for person in personwiseKeypoints if person[18] >= 10]
         
-        print(len(personwiseKeypoints))
+        personwiseParts = [[] for i in range(len(personwiseKeypoints))]
+        for i in range(18):
+            for n in range(len(personwiseKeypoints)):
+                index = personwiseKeypoints[n][np.array(POSE_PAIRS[i])]
+                if -1 in index:
+                    continue
+                B = np.int32(self.keypoints_list[index.astype(int), 0])
+                A = np.int32(self.keypoints_list[index.astype(int), 1])
+                personwiseParts[n].append([B.tolist(), A.tolist()])
 
         return personwiseKeypoints, self.keypoints_list
 

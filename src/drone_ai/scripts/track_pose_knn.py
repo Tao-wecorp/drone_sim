@@ -44,7 +44,7 @@ class Tracking(object):
                 frame = deepcopy(self.frame)
                 
                 personwiseKeypoints,  keypoints_list= openpose.detectPersonwiseKeypoints(frame)
-                for i in range(17):
+                for i in range(18):
                     for n in range(len(personwiseKeypoints)):
                         index = personwiseKeypoints[n][np.array(POSE_PAIRS[i])]
                         if -1 in index:
