@@ -53,7 +53,7 @@ class Tracking(object):
                         A = np.int32(keypoints_list[index.astype(int), 1])
                         if i==0:
                             cv2.putText(frame, str(n), (B[0], A[0]-50), cv2.FONT_HERSHEY_PLAIN, 1.0, colors[n], 2)
-                        cv2.line(frame, (B[0], A[0]), (B[1], A[1]), colors[n], 3, cv2.LINE_AA)
+                        cv2.line(frame, (B[0], A[0]), (B[1], A[1]), colors[i], 3, cv2.LINE_AA)
                 
                 # detected_keypoints = openpose.detectKeypoints(frame)
                 
