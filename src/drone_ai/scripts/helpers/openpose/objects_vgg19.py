@@ -33,10 +33,9 @@ mapIdx = [[31,32], [39,40], [33,34], [35,36], [41,42], [43,44],
           [47,48], [49,50], [53,54], [51,52], [55,56], 
           [37,38], [45,46]]
 
-colors = [ [0,100,255], [0,100,255], [0,255,255], [0,100,255], [0,255,255], [0,100,255],
+colors = [[0,100,255], [0,100,255], [0,255,255], [0,100,255], [0,255,255], [0,100,255],
          [0,255,0], [255,200,100], [255,0,255], [0,255,0], [255,200,100], [255,0,255],
          [0,0,255], [255,0,0], [200,200,0], [255,0,0], [200,200,0], [0,0,0]]
-
 
 
 class OpenPoseVGG():
@@ -78,8 +77,8 @@ class OpenPoseVGG():
         for i in range(18):
             for n in range(len(personwiseKeypoints)):
                 index = personwiseKeypoints[n][np.array(POSE_PAIRS[i])]
-                if -1 in index:
-                    continue
+                # if -1 in index:
+                #     continue
                 B = np.int32(self.keypoints_list[index.astype(int), 0])
                 A = np.int32(self.keypoints_list[index.astype(int), 1])
                 personwiseParts[n].append([B.tolist(), A.tolist()])
@@ -113,6 +112,18 @@ class OpenPoseVGG():
             self.detected_keypoints.append(keypoints_with_id)
 
         return self.detected_keypoints
+
+    def detectFeatures(self, cv_image):
+        self.frameWidth = cv_image.shape[1]
+        self.frameHeight = cv_image.shape[0]
+
+        inHeight = 300
+        inWidth = int((inHeight/self.frameHeight)*self.frameWidth)
+
+        net.setInput(cv2.dnn.blobFromImage(cv_image, 1.0/255, (inWidth, inHeight), (0, 0, 0), swapRB=False, crop=False))
+        features = net.forward("relu4_4_CPM")
+
+        return features
    
     def calcYawAngle(self, position):
         yaw_goal = degrees(atan(float(320-position[0])/(480-position[1])))

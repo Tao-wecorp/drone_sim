@@ -42,6 +42,9 @@ class Tracking(object):
             if self.frame is not None:
                 start_time = time.time()
                 frame = deepcopy(self.frame)
+
+                features = openpose.detectFeatures(frame)
+                # print(features.shape)
                 
                 personwiseKeypoints,  keypoints_list= openpose.detectPersonwiseKeypoints(frame)
                 for i in range(18):
